@@ -30,10 +30,10 @@ const Display = () => {
             <div className="col d-flex flex-wrap justify-content-around gap-2">
               {new Array(10).fill("").map((item, i) => (
                 <div className="div" key={i}>
-                  <MovieCard />
+                  {/* <MovieCard /> */}
                 </div>
               ))}
-              <MovieCard />
+              {/* <MovieCard /> */}
             </div>
           </div>
         </div>

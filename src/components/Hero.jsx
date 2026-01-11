@@ -1,18 +1,33 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import MovieCard from "./MovieCard";
-import { fetchFromAPI } from "../util/axios";
+import { fetchFromAPI, randomStr } from "../util/axios";
 
 const Hero = () => {
+  const [searchedMovie, setsearchedMovie] = useState({});
+  const [bgImg, setbgImg] = useState();
+  const shouldFetch = useRef(true);
+  const searchRef = useRef("");
   useEffect(() => {
-    fetchFromAPI("Avatar");
+    if (shouldFetch.current) {
+      fetchMovie(randomStr());
+      shouldFetch.current = false;
+    }
   }, []);
+  const fetchMovie = async (str) => {
+    const movie = await fetchFromAPI(str);
+    setsearchedMovie(movie);
+    setbgImg(movie.Poster);
+  };
   const movieStyle = {
-    backgroundImage: `url(
-"https://www.omdbapi.com/src/poster.jpg  "  )`,
+    backgroundImage: `url(${bgImg})`,
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
   };
-
+  const handleOnMovieSearch = () => {
+    const str = searchRef.current.value;
+    fetchMovie(str);
+    searchRef.current.value = "";
+  };
   return (
     <div>
       <nav className=" py-3 text-danger fixed-top">
@@ -32,17 +47,24 @@ const Hero = () => {
 
           <div className="input-group my-5">
             <input
+              ref={searchRef}
               type="text"
               className="form-control"
               placeholder="Search Movie Name"
+              aria-label="Search Movie Name"
             />
 
-            <button className="btn btn-danger" type="button" id="button-addon2">
-              Button
+            <button
+              className="btn btn-danger"
+              type="button"
+              id="button-addon2"
+              onClick={handleOnMovieSearch}
+            >
+              Search
             </button>
           </div>
           <div className="movie-card-display">
-            <MovieCard />
+            <MovieCard searchedMovie={searchedMovie} />
           </div>
         </div>
       </div>
