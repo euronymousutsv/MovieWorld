@@ -1,6 +1,6 @@
 import "./App.css";
-import Display from "./components /Display";
-import Hero from "./components /Hero";
+import Display from "./components/Display";
+import Hero from "./components/Hero";
 
 function App() {
   return (
